@@ -83,7 +83,7 @@ async function initPyodide() {
   const py = await loadPyodide({ indexURL: INDEX_URL });
   setBanner("info", "Installing SymPy (micropip)…");
   const micropip = py.pyimport("micropip");
-  await micropip.install("sympy==1.13.3");
+  await micropip.install("sympy");
   await loadCpCore(py);
   pyodide = py;
   setBanner("ok", "Ready — SymPy loaded.");
