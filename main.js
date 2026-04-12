@@ -97,6 +97,20 @@ function showError(preId, err) {
   }
 }
 
+/**
+ * @param {string} btnId
+ * @param {() => Promise<void>} fn
+ */
+async function withButtonBusy(btnId, fn) {
+  const btn = document.getElementById(btnId);
+  if (btn) btn.disabled = true;
+  try {
+    await fn();
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
 async function runPrimeToolkit() {
   const input = document.getElementById("input-prime");
   const pre = document.getElementById("out-prime");
@@ -114,6 +128,10 @@ async function runPrimeToolkit() {
   } catch (e) {
     showError("out-prime", e);
   }
+}
+
+async function runPrimeToolkitWrapped() {
+  await withButtonBusy("btn-prime", runPrimeToolkit);
 }
 
 async function runMaxTau() {
@@ -137,6 +155,10 @@ async function runMaxTau() {
   }
 }
 
+async function runMaxTauWrapped() {
+  await withButtonBusy("btn-tau", runMaxTau);
+}
+
 async function runPrimePi() {
   const input = document.getElementById("input-pi");
   const pre = document.getElementById("out-pi");
@@ -156,6 +178,10 @@ async function runPrimePi() {
   }
 }
 
+async function runPrimePiWrapped() {
+  await withButtonBusy("btn-pi", runPrimePi);
+}
+
 async function copyPre(id) {
   const pre = document.getElementById(id);
   if (!pre || !pre.textContent) return;
@@ -167,13 +193,13 @@ async function copyPre(id) {
 }
 
 document.getElementById("btn-prime")?.addEventListener("click", () => {
-  void runPrimeToolkit();
+  void runPrimeToolkitWrapped();
 });
 document.getElementById("btn-tau")?.addEventListener("click", () => {
-  void runMaxTau();
+  void runMaxTauWrapped();
 });
 document.getElementById("btn-pi")?.addEventListener("click", () => {
-  void runPrimePi();
+  void runPrimePiWrapped();
 });
 
 for (const btn of document.querySelectorAll("button.copy")) {
