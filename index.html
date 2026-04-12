@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CP number theory tools</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>Competitive programming · number theory</h1>
+      <p class="lede">
+        Runs in your browser with
+        <a href="https://pyodide.org/">Pyodide</a> and
+        <a href="https://www.sympy.org/">SymPy</a>. First load downloads the runtime
+        (~MB); later visits are cached.
+      </p>
+    </header>
+
+    <div id="runtime-banner" class="banner banner--info" role="status">
+      <span class="banner__text">Loading Pyodide and SymPy…</span>
+    </div>
+
+    <main class="grid">
+      <section class="card" aria-labelledby="h-prime">
+        <h2 id="h-prime">Primes around <span class="mono">X</span></h2>
+        <p class="hint">
+          Prime test, factorization, largest prime &lt; <span class="mono">X</span>, smallest
+          prime &gt; <span class="mono">X</span>. SymPy handles large integers; very large
+          factorizations can take a long time or exhaust memory.
+        </p>
+        <label class="field">
+          <span class="field__label">X</span>
+          <input id="input-prime" type="text" inputmode="numeric" autocomplete="off" />
+        </label>
+        <button type="button" class="btn" id="btn-prime" disabled>Compute</button>
+        <pre class="out" id="out-prime" aria-live="polite"></pre>
+        <button type="button" class="btn btn--ghost copy" data-copy="out-prime" disabled>
+          Copy output
+        </button>
+      </section>
+
+      <section class="card" aria-labelledby="h-tau">
+        <h2 id="h-tau">Max divisors ≤ <span class="mono">X</span></h2>
+        <p class="hint">
+          Maximum <span class="mono">N ≤ X</span> such that
+          <span class="mono">d(N)</span> is largest among
+          <span class="mono">{1,…,X}</span> (ties → larger <span class="mono">N</span>). Uses an
+          <span class="mono">O(X log X)</span> divisor sieve;
+          <span class="mono">X ≤ 2·10⁶</span> in this build.
+        </p>
+        <label class="field">
+          <span class="field__label">X</span>
+          <input id="input-tau" type="text" inputmode="numeric" autocomplete="off" />
+        </label>
+        <button type="button" class="btn" id="btn-tau" disabled>Compute</button>
+        <pre class="out" id="out-tau" aria-live="polite"></pre>
+        <button type="button" class="btn btn--ghost copy" data-copy="out-tau" disabled>
+          Copy output
+        </button>
+      </section>
+
+      <section class="card" aria-labelledby="h-pi">
+        <h2 id="h-pi">Primes ≤ <span class="mono">X</span></h2>
+        <p class="hint">
+          Returns <span class="mono">π(X)</span> (count of primes ≤ <span class="mono">X</span>).
+          SymPy implementation; large <span class="mono">X</span> may be slow.
+        </p>
+        <label class="field">
+          <span class="field__label">X</span>
+          <input id="input-pi" type="text" inputmode="numeric" autocomplete="off" />
+        </label>
+        <button type="button" class="btn" id="btn-pi" disabled>Compute</button>
+        <pre class="out" id="out-pi" aria-live="polite"></pre>
+        <button type="button" class="btn btn--ghost copy" data-copy="out-pi" disabled>
+          Copy output
+        </button>
+      </section>
+
+      <section class="card card--muted" aria-labelledby="h-more">
+        <h2 id="h-more">Extending</h2>
+        <p class="hint">
+          Add new tools by defining functions in
+          <span class="mono">cp_core.py</span>, exposing them via
+          <span class="mono">main.js</span>, and mirroring the HTML pattern above.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        Deploy as
+        <a href="https://pages.github.com/">GitHub Pages</a>
+        (publish branch or <span class="mono">/docs</span>). No server required.
+      </p>
+    </footer>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
