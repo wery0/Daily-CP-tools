@@ -4,9 +4,13 @@ Static page that runs **Python + SymPy** in the browser via [Pyodide](https://py
 
 ## Features
 
-- **Primes around X**: primality, factorization, largest prime `< X`, smallest prime `> X`.
-- **Max divisors ≤ X**: argmax `N ≤ X` by divisor count (ties → larger `N`), with `O(X log X)` sieve; capped at `2·10⁶`.
-- **π(X)**: count of primes `≤ X` via SymPy.
+- **Primes around N**: primality, largest prime `< N`, smallest prime `> N`.
+- **Factorization**: prime factorization of `N` (SymPy).
+- **Max divisors ≤ N**: argmax `M ≤ N` by divisor count (ties → larger `M`), using the [HCN gist](https://gist.github.com/dario2994/fb4713f252ca86c1254d) layer loop.
+- **π(N)**: count of primes `≤ N` via SymPy.
+- **Factorial** `N!` and **binomial** `C(N, K)` (exact SymPy; bounded `N` in the page copy).
+- **Arithmetic expression**: numeric operators only (`**` or `^` for powers); no bitwise ops, variables, or calls.
+- **Constants**: π, e, and φ (golden ratio) to 50 digits after the decimal, with a copy icon (no Pyodide).
 
 ## Deploy to GitHub Pages
 

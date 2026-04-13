@@ -1,5 +1,8 @@
 :root {
   color-scheme: light dark;
+  /* Upper bound for header / banner / grid width. Actual width is never wider than the viewport
+     (minus horizontal padding), so raising this past ~your window width will not look wider. */
+  --layout-max: 1330px;
   --bg: #0f1419;
   --surface: #1a222c;
   --border: #2d3a47;
@@ -51,7 +54,8 @@ a:hover {
 
 .site-header,
 .site-footer {
-  max-width: 960px;
+  width: min(100%, var(--layout-max));
+  max-width: var(--layout-max);
   margin: 0 auto;
   padding: 1.25rem 1.25rem 0;
 }
@@ -59,6 +63,22 @@ a:hover {
 .site-header h1 {
   margin: 0 0 0.35rem;
   font-size: 1.55rem;
+  font-weight: 650;
+}
+
+.site-header__download {
+  margin: 0 0 0.65rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--text);
+  max-width: 100%;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.site-header__download strong {
   font-weight: 650;
 }
 
@@ -75,7 +95,8 @@ a:hover {
 }
 
 .banner {
-  max-width: 960px;
+  width: min(100%, var(--layout-max));
+  max-width: var(--layout-max);
   margin: 1rem auto 0;
   padding: 0.65rem 1rem;
   border-radius: var(--radius);
@@ -100,25 +121,30 @@ a:hover {
   font-size: 0.95rem;
 }
 
+/* Nine tool cards in row-major order; .card--full spans all columns. */
 .grid {
-  max-width: 960px;
+  width: min(100%, var(--layout-max));
+  max-width: var(--layout-max);
   margin: 0 auto;
   padding: 1rem 1.25rem 2rem;
   display: grid;
   gap: 1rem;
+  grid-template-columns: 1fr;
+  align-items: start;
 }
 
-@media (min-width: 720px) {
+@media (min-width: 920px) {
   .grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
 
-  .card--muted {
+  .card--full {
     grid-column: 1 / -1;
   }
 }
 
 .card {
+  min-width: 0;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -141,27 +167,94 @@ a:hover {
   flex-direction: column;
   gap: 0.25rem;
   margin-bottom: 0.65rem;
+  min-width: 0;
 }
 
-.field__label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--muted);
+.btn-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
 }
 
-input[type="text"] {
+.btn-row .btn {
+  flex-shrink: 0;
+}
+
+.btn-row .field--check {
+  margin-left: auto;
+}
+
+.field--check {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  user-select: none;
+}
+
+.field--check input {
+  margin: 0;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.field-row {
+  display: flex;
+  flex-direction: row;
+  gap: 0.65rem;
+  margin-bottom: 0.65rem;
+  align-items: stretch;
+}
+
+.field-row > .field {
+  flex: 1 1 0;
+  margin-bottom: 0;
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .field-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .field-row > .field {
+    flex: none;
+  }
+}
+
+textarea.input-numeric {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
   font-family: var(--mono);
-  font-size: 0.95rem;
-  padding: 0.5rem 0.6rem;
+  font-size: 1rem;
+  line-height: 1.45;
+  padding: 0.4rem 0.6rem;
   border-radius: 6px;
   border: 1px solid var(--border);
   background: var(--bg);
   color: var(--text);
+  resize: vertical;
+  min-height: 2.75rem;
+  overflow-wrap: anywhere;
+  word-break: break-all;
 }
 
-input[type="text"]:focus {
+textarea.input-numeric:focus {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
+}
+
+textarea.input-numeric::placeholder {
+  color: var(--muted);
+  opacity: 0.45;
 }
 
 .btn {
@@ -193,6 +286,67 @@ input[type="text"]:focus {
   border: 1px solid var(--border);
 }
 
+.icons-def {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.out-shell {
+  position: relative;
+  margin-top: 0.75rem;
+}
+
+.out-shell--const {
+  margin-top: 0;
+}
+
+.out-shell > .out {
+  margin-top: 0;
+  padding: 0.55rem 2.35rem 0.65rem 0.65rem;
+  min-height: 3.5rem;
+}
+
+.out-copy {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  line-height: 0;
+}
+
+.out-copy:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--accent-dim);
+}
+
+.out-copy:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.out-copy:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.out-copy__icon {
+  display: block;
+  pointer-events: none;
+}
+
 .out {
   margin: 0.75rem 0 0;
   min-height: 3.5rem;
@@ -212,4 +366,39 @@ input[type="text"]:focus {
 
 .card--muted {
   opacity: 0.95;
+}
+
+.const-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.const-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 0.65rem;
+  align-items: start;
+  min-width: 0;
+}
+
+.const-item__name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--muted);
+  padding-top: 0.35rem;
+}
+
+.const-item__val {
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 520px) {
+  .const-item {
+    grid-template-columns: 1fr;
+  }
 }

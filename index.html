@@ -3,17 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CP number theory tools</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Daily CP tools</title>
+    <!-- Bump ?v= when editing CSS so the browser reloads the file (otherwise tweaks look “stuck”). -->
+    <link rel="stylesheet" href="style.css?v=8" />
   </head>
   <body>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="0"
+      height="0"
+      class="icons-def"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <symbol id="icon-clipboard" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M16 1H4c-1.1 0-2 .9-2 2v1h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 14H8V7h11v12z"
+          />
+        </symbol>
+      </defs>
+    </svg>
+
     <header class="site-header">
-      <h1>Competitive programming · number theory</h1>
+      <h1>Daily CP tools</h1>
+      <p class="site-header__download">
+        Downloads ~18 MB on first visit. Later visits use the browser cache.
+      </p>
       <p class="lede">
         Runs in your browser with
         <a href="https://pyodide.org/">Pyodide</a> and
-        <a href="https://www.sympy.org/">SymPy</a>. First load downloads the runtime
-        (~MB); later visits are cached.
+        <a href="https://www.sympy.org/">SymPy</a>.
       </p>
     </header>
 
@@ -23,78 +44,428 @@
 
     <main class="grid">
       <section class="card" aria-labelledby="h-prime">
-        <h2 id="h-prime">Primes around <span class="mono">X</span></h2>
+        <h2 id="h-prime">Is prime</h2>
         <p class="hint">
-          Prime test, factorization, largest prime &lt; <span class="mono">X</span>, smallest
-          prime &gt; <span class="mono">X</span>. SymPy handles large integers; very large
-          factorizations can take a long time or exhaust memory.
+          Is <span class="mono">N</span> prime? Previous and next prime. Feasible for <span class="mono">N ≤ 10<sup>300</sup></span>.
         </p>
-        <label class="field">
-          <span class="field__label">X</span>
-          <input id="input-prime" type="text" inputmode="numeric" autocomplete="off" />
-        </label>
+        <div class="field">
+          <textarea
+            id="input-prime"
+            class="input-numeric"
+            rows="1"
+            inputmode="text"
+            autocomplete="off"
+            spellcheck="false"
+            wrap="soft"
+            placeholder="N = "
+            aria-label="N"
+          ></textarea>
+        </div>
         <button type="button" class="btn" id="btn-prime" disabled>Compute</button>
-        <pre class="out" id="out-prime" aria-live="polite"></pre>
-        <button type="button" class="btn btn--ghost copy" data-copy="out-prime" disabled>
-          Copy output
-        </button>
+        <div class="out-shell">
+          <button
+            type="button"
+            class="out-copy copy copy-when-ready"
+            data-copy="out-prime"
+            disabled
+            aria-label="Copy output"
+            title="Copy"
+          >
+            <svg class="out-copy__icon" width="16" height="16" aria-hidden="true" focusable="false">
+              <use href="#icon-clipboard" />
+            </svg>
+          </button>
+          <pre class="out" id="out-prime" aria-live="polite"></pre>
+        </div>
       </section>
 
-      <section class="card" aria-labelledby="h-tau">
-        <h2 id="h-tau">Max divisors ≤ <span class="mono">X</span></h2>
+      <section class="card" aria-labelledby="h-fac">
+        <h2 id="h-fac">Factorization</h2>
         <p class="hint">
-          Maximum <span class="mono">N ≤ X</span> such that
-          <span class="mono">d(N)</span> is largest among
-          <span class="mono">{1,…,X}</span> (ties → larger <span class="mono">N</span>). Uses an
-          <span class="mono">O(X log X)</span> divisor sieve;
-          <span class="mono">X ≤ 2·10⁶</span> in this build.
+          Prime factorization of <span class="mono">N</span>. Feasible for <span class="mono">N ≤ 10<sup>40</sup></span>.
         </p>
-        <label class="field">
-          <span class="field__label">X</span>
-          <input id="input-tau" type="text" inputmode="numeric" autocomplete="off" />
-        </label>
-        <button type="button" class="btn" id="btn-tau" disabled>Compute</button>
-        <pre class="out" id="out-tau" aria-live="polite"></pre>
-        <button type="button" class="btn btn--ghost copy" data-copy="out-tau" disabled>
-          Copy output
-        </button>
+        <div class="field">
+          <textarea
+            id="input-fac"
+            class="input-numeric"
+            rows="1"
+            inputmode="text"
+            autocomplete="off"
+            spellcheck="false"
+            wrap="soft"
+            placeholder="N = "
+            aria-label="N"
+          ></textarea>
+        </div>
+        <button type="button" class="btn" id="btn-fac" disabled>Compute</button>
+        <div class="out-shell">
+          <button
+            type="button"
+            class="out-copy copy copy-when-ready"
+            data-copy="out-fac"
+            disabled
+            aria-label="Copy output"
+            title="Copy"
+          >
+            <svg class="out-copy__icon" width="16" height="16" aria-hidden="true" focusable="false">
+              <use href="#icon-clipboard" />
+            </svg>
+          </button>
+          <pre class="out" id="out-fac" aria-live="polite"></pre>
+        </div>
       </section>
 
       <section class="card" aria-labelledby="h-pi">
-        <h2 id="h-pi">Primes ≤ <span class="mono">X</span></h2>
+        <h2 id="h-pi">Primes ≤ <span class="mono">N</span></h2>
         <p class="hint">
-          Returns <span class="mono">π(X)</span> (count of primes ≤ <span class="mono">X</span>).
-          SymPy implementation; large <span class="mono">X</span> may be slow.
+          Returns <span class="mono">π(N)</span> (count of primes ≤ <span class="mono">N</span>).
+          Feasible for <span class="mono">N ≤ 10<sup>11</sup></span>.
         </p>
-        <label class="field">
-          <span class="field__label">X</span>
-          <input id="input-pi" type="text" inputmode="numeric" autocomplete="off" />
-        </label>
+        <div class="field">
+          <textarea
+            id="input-pi"
+            class="input-numeric"
+            rows="1"
+            inputmode="text"
+            autocomplete="off"
+            spellcheck="false"
+            wrap="soft"
+            placeholder="N = "
+            aria-label="N"
+          ></textarea>
+        </div>
         <button type="button" class="btn" id="btn-pi" disabled>Compute</button>
-        <pre class="out" id="out-pi" aria-live="polite"></pre>
-        <button type="button" class="btn btn--ghost copy" data-copy="out-pi" disabled>
-          Copy output
-        </button>
+        <div class="out-shell">
+          <button
+            type="button"
+            class="out-copy copy copy-when-ready"
+            data-copy="out-pi"
+            disabled
+            aria-label="Copy output"
+            title="Copy"
+          >
+            <svg class="out-copy__icon" width="16" height="16" aria-hidden="true" focusable="false">
+              <use href="#icon-clipboard" />
+            </svg>
+          </button>
+          <pre class="out" id="out-pi" aria-live="polite"></pre>
+        </div>
       </section>
 
-      <section class="card card--muted" aria-labelledby="h-more">
-        <h2 id="h-more">Extending</h2>
+      <section class="card" aria-labelledby="h-tau">
+        <h2 id="h-tau">Max divisors ≤ <span class="mono">N</span></h2>
         <p class="hint">
-          Add new tools by defining functions in
-          <span class="mono">cp_core.py</span>, exposing them via
-          <span class="mono">main.js</span>, and mirroring the HTML pattern above.
+          Maximum <span class="mono">d(M)</span> among <span class="mono">M</span> in
+          <span class="mono">{1,…,N}</span>. Feasible for <span class="mono">N ≤ 10<sup>200</sup></span>.
         </p>
+        <div class="field">
+          <textarea
+            id="input-tau"
+            class="input-numeric"
+            rows="1"
+            inputmode="text"
+            autocomplete="off"
+            spellcheck="false"
+            wrap="soft"
+            placeholder="N = "
+            aria-label="N"
+          ></textarea>
+        </div>
+        <button type="button" class="btn" id="btn-tau" disabled>Compute</button>
+        <div class="out-shell">
+          <button
+            type="button"
+            class="out-copy copy copy-when-ready"
+            data-copy="out-tau"
+            disabled
+            aria-label="Copy output"
+            title="Copy"
+          >
+            <svg class="out-copy__icon" width="16" height="16" aria-hidden="true" focusable="false">
+              <use href="#icon-clipboard" />
+            </svg>
+          </button>
+          <pre class="out" id="out-tau" aria-live="polite"></pre>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="h-fact">
+        <h2 id="h-fact">Factorial <span class="mono">N!</span></h2>
+        <p class="hint">
+          Exact <span class="mono">N!</span>. Here
+          <span class="mono">N ≤ 1,000</span>.
+        </p>
+        <div class="field">
+          <textarea
+            id="input-fact"
+            class="input-numeric"
+            rows="1"
+            inputmode="numeric"
+            autocomplete="off"
+            spellcheck="false"
+            wrap="soft"
+            placeholder="N = "
+            aria-label="N"
+          ></textarea>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="btn-factorial" disabled>Compute</button>
+          <label class="field--check">
+            <input type="checkbox" id="chk-factorial-approx" />
+            <span>Approximate</span>
+          </label>
+        </div>
+        <div class="out-shell">
+          <button
+            type="button"
+            class="out-copy copy copy-when-ready"
+            data-copy="out-fact"
+            disabled
+            aria-label="Copy output"
+            title="Copy"
+          >
+            <svg class="out-copy__icon" width="16" height="16" aria-hidden="true" focusable="false">
+              <use href="#icon-clipboard" />
+            </svg>
+          </button>
+          <pre class="out" id="out-fact" aria-live="polite"></pre>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="h-binom">
+        <h2 id="h-binom">Binomial <span class="mono">C(N, K)</span></h2>
+        <p class="hint">
+          Exact <span class="mono">C(N, K)</span>. Here
+          <span class="mono">N ≤ 1,000</span>.
+        </p>
+        <div class="field-row">
+          <div class="field">
+            <textarea
+              id="input-binom-n"
+              class="input-numeric"
+              rows="1"
+              inputmode="numeric"
+              autocomplete="off"
+              spellcheck="false"
+              wrap="soft"
+              placeholder="N = "
+              aria-label="N"
+            ></textarea>
+          </div>
+          <div class="field">
+            <textarea
+              id="input-binom-k"
+              class="input-numeric"
+              rows="1"
+              inputmode="numeric"
+              autocomplete="off"
+              spellcheck="false"
+              wrap="soft"
+              placeholder="K = "
+              aria-label="K"
+            ></textarea>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="btn-binom" disabled>Compute</button>
+          <label class="field--check">
+            <input type="checkbox" id="chk-binom-approx" />
+            <span>Approximate</span>
+          </label>
+        </div>
+        <div class="out-shell">
+          <button
+            type="button"
+            class="out-copy copy copy-when-ready"
+            data-copy="out-binom"
+            disabled
+            aria-label="Copy output"
+            title="Copy"
+          >
+            <svg class="out-copy__icon" width="16" height="16" aria-hidden="true" focusable="false">
+              <use href="#icon-clipboard" />
+            </svg>
+          </button>
+          <pre class="out" id="out-binom" aria-live="polite"></pre>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="h-expr">
+        <h2 id="h-expr">Arithmetic expression</h2>
+        <p class="hint">
+          Numeric literals, <span class="mono">+ - * / // %</span>, powers with <span class="mono">**</span> or <span class="mono">^</span>.
+          No bitwise operators or function calls.
+        </p>
+        <div class="field">
+          <textarea
+            id="input-expr"
+            class="input-numeric"
+            rows="2"
+            inputmode="text"
+            autocomplete="off"
+            spellcheck="false"
+            wrap="soft"
+            placeholder="4 ^ 3"
+            aria-label="Python arithmetic expression"
+          ></textarea>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="btn-expr" disabled>Evaluate</button>
+          <label class="field--check">
+            <input type="checkbox" id="chk-expr-approx" />
+            <span>Approximate</span>
+          </label>
+        </div>
+        <div class="out-shell">
+          <button
+            type="button"
+            class="out-copy copy copy-when-ready"
+            data-copy="out-expr"
+            disabled
+            aria-label="Copy output"
+            title="Copy"
+          >
+            <svg class="out-copy__icon" width="16" height="16" aria-hidden="true" focusable="false">
+              <use href="#icon-clipboard" />
+            </svg>
+          </button>
+          <pre class="out" id="out-expr" aria-live="polite"></pre>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="h-base">
+        <h2 id="h-base">Base conversion</h2>
+        <p class="hint">
+          Read the number in the current base, then show it in the target base (bases
+          <span class="mono">2</span>–<span class="mono">36</span>; digits
+          <span class="mono">0–9A–Z</span>, case-insensitive).
+        </p>
+        <div class="field">
+          <textarea
+            id="input-base-num"
+            class="input-numeric"
+            rows="1"
+            inputmode="text"
+            autocomplete="off"
+            spellcheck="false"
+            wrap="soft"
+            placeholder="Number (e.g. 255 or FF)"
+            aria-label="Number to convert"
+          >998244353</textarea>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <textarea
+              id="input-base-from"
+              class="input-numeric"
+              rows="1"
+              inputmode="numeric"
+              autocomplete="off"
+              spellcheck="false"
+              wrap="soft"
+              placeholder="From base"
+              aria-label="Current base"
+            >10</textarea>
+          </div>
+          <div class="field">
+            <textarea
+              id="input-base-to"
+              class="input-numeric"
+              rows="1"
+              inputmode="numeric"
+              autocomplete="off"
+              spellcheck="false"
+              wrap="soft"
+              placeholder="To base"
+              aria-label="Target base"
+            >2</textarea>
+          </div>
+        </div>
+        <button type="button" class="btn" id="btn-base" disabled>Convert</button>
+        <div class="out-shell">
+          <button
+            type="button"
+            class="out-copy copy copy-when-ready"
+            data-copy="out-base"
+            disabled
+            aria-label="Copy output"
+            title="Copy"
+          >
+            <svg class="out-copy__icon" width="16" height="16" aria-hidden="true" focusable="false">
+              <use href="#icon-clipboard" />
+            </svg>
+          </button>
+          <pre class="out" id="out-base" aria-live="polite"></pre>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="h-const">
+        <h2 id="h-const">Constants</h2>
+        <p class="hint">
+          Decimal forms with 40 digits after the decimal point.
+        </p>
+        <ul class="const-list">
+          <li class="const-item">
+            <span class="const-item__name">π</span>
+            <div class="out-shell out-shell--const">
+              <button
+                type="button"
+                class="out-copy copy copy-const"
+                data-copy="const-pi"
+                aria-label="Copy π"
+                title="Copy"
+              >
+                <svg class="out-copy__icon" width="16" height="16" aria-hidden="true" focusable="false">
+                  <use href="#icon-clipboard" />
+                </svg>
+              </button>
+              <pre class="out const-item__val mono" id="const-pi">3.1415926535897932384626433832795028841971</pre>
+            </div>
+          </li>
+          <li class="const-item">
+            <span class="const-item__name">e</span>
+            <div class="out-shell out-shell--const">
+              <button
+                type="button"
+                class="out-copy copy copy-const"
+                data-copy="const-e"
+                aria-label="Copy e"
+                title="Copy"
+              >
+                <svg class="out-copy__icon" width="16" height="16" aria-hidden="true" focusable="false">
+                  <use href="#icon-clipboard" />
+                </svg>
+              </button>
+              <pre class="out const-item__val mono" id="const-e">2.7182818284590452353602874713526624977572</pre>
+            </div>
+          </li>
+          <li class="const-item">
+            <span class="const-item__name">φ</span>
+            <div class="out-shell out-shell--const">
+              <button
+                type="button"
+                class="out-copy copy copy-const"
+                data-copy="const-phi"
+                aria-label="Copy φ"
+                title="Copy"
+              >
+                <svg class="out-copy__icon" width="16" height="16" aria-hidden="true" focusable="false">
+                  <use href="#icon-clipboard" />
+                </svg>
+              </button>
+              <pre class="out const-item__val mono" id="const-phi">1.6180339887498948482045868343656381177203</pre>
+            </div>
+          </li>
+        </ul>
       </section>
     </main>
 
     <footer class="site-footer">
       <p>
-        Deploy as
-        <a href="https://pages.github.com/">GitHub Pages</a>
-        (publish branch or <span class="mono">/docs</span>). No server required.
+        By <a href="https://github.com/wery0">wery0</a>.
       </p>
     </footer>
 
-    <script type="module" src="main.js"></script>
+    <script type="module" src="main.js?v=8"></script>
   </body>
 </html>
