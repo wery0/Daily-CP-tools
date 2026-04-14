@@ -6,19 +6,12 @@ Static page that runs **Python + SymPy** in the browser via [Pyodide](https://py
 
 - **Primes around N**: primality, largest prime `< N`, smallest prime `> N`.
 - **Factorization**: prime factorization of `N` (SymPy).
-- **Max divisors ≤ N**: argmax `M ≤ N` by divisor count (ties → larger `M`), using the [HCN gist](https://gist.github.com/dario2994/fb4713f252ca86c1254d) layer loop.
+- **Max divisors ≤ N**: argmax `M ≤ N` by divisor count.
 - **π(N)**: count of primes `≤ N` via SymPy.
 - **Factorial** `N!` and **binomial** `C(N, K)` (exact SymPy; bounded `N` in the page copy).
-- **Arithmetic expression**: numeric operators only (`**` or `^` for powers); no bitwise ops, variables, or calls.
-- **Constants**: π, e, and φ (golden ratio) to 50 digits after the decimal, with a copy icon (no Pyodide).
-
-## Deploy to GitHub Pages
-
-1. Create a new repository and push this folder’s contents to the default branch.
-2. Repository **Settings → Pages**: build from the branch root (`/`).
-3. After the workflow finishes, open `https://<username>.github.io/<repo>/`.
-
-Use a project site URL as above, or name the repo `<username>.github.io` for `https://<username>.github.io/`.
+- **Arithmetic expression**: numeric operators (`**` or `^` for powers) and `sqrt`, `cbrt`, `log` (base 10), `log2`, `ln`; no bitwise ops, variables, or other calls.
+- **Base conversion**: convert number from one base to another.
+- **Constants**: π, e, and φ up to 40 digits after the decimal, with a copy icon.
 
 ## Local preview
 
@@ -30,6 +23,3 @@ python -m http.server 8080
 
 Then visit `http://localhost:8080/`.
 
-## Extending
-
-Add functions in `cp_core.py`, load them with `pyodide.runPythonAsync`, and call from `main.js` using the same pattern as the existing buttons.

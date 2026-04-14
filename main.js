@@ -1,8 +1,36 @@
 const PYODIDE_VERSION = "0.26.4";
 const INDEX_URL = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
+const THEME_KEY = "cp-theme";
 
 /** @type {any} */
 let pyodide = null;
+
+function getTheme() {
+  return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+}
+
+function setTheme(theme) {
+  const next = theme === "dark" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", next);
+  try {
+    localStorage.setItem(THEME_KEY, next);
+  } catch {
+    /* ignore */
+  }
+  syncThemeToggleUi();
+}
+
+function syncThemeToggleUi() {
+  const btn = document.getElementById("theme-toggle");
+  if (!btn) return;
+  if (getTheme() === "dark") {
+    btn.setAttribute("aria-label", "Switch to light theme");
+    btn.setAttribute("title", "Light mode");
+  } else {
+    btn.setAttribute("aria-label", "Switch to dark theme");
+    btn.setAttribute("title", "Dark mode");
+  }
+}
 
 function setBanner(kind, text) {
   const el = document.getElementById("runtime-banner");
@@ -318,6 +346,11 @@ async function copyPre(id) {
     pre.select?.();
   }
 }
+
+document.getElementById("theme-toggle")?.addEventListener("click", () => {
+  setTheme(getTheme() === "dark" ? "light" : "dark");
+});
+syncThemeToggleUi();
 
 document.getElementById("btn-prime")?.addEventListener("click", () => {
   void runPrimeToolkitWrapped();

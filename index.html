@@ -4,8 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Daily CP tools</title>
+    <script>
+      (function () {
+        try {
+          var k = "cp-theme";
+          var s = localStorage.getItem(k);
+          var t =
+            s === "light" || s === "dark"
+              ? s
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
     <!-- Bump ?v= when editing CSS so the browser reloads the file (otherwise tweaks look “stuck”). -->
-    <link rel="stylesheet" href="style.css?v=8" />
+    <link rel="stylesheet" href="style.css?v=9" />
   </head>
   <body>
     <svg
@@ -23,13 +40,43 @@
             d="M16 1H4c-1.1 0-2 .9-2 2v1h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 14H8V7h11v12z"
           />
         </symbol>
+        <symbol id="icon-moon" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.6 2.5 5.41 5.41 0 0 1-5.4-5.4 5.389 5.389 0 0 1 2.5-4.6c-.44-.06-.9-.1-1.36-.1z"
+          />
+        </symbol>
+        <symbol id="icon-sun" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="4" fill="currentColor" />
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            d="M12 2v2m0 14v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m14 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"
+          />
+        </symbol>
       </defs>
     </svg>
 
     <header class="site-header">
+      <button
+        type="button"
+        class="theme-toggle"
+        id="theme-toggle"
+        aria-label="Switch to dark theme"
+        title="Dark mode"
+      >
+        <svg class="theme-toggle__icon theme-toggle__icon--moon" width="20" height="20" aria-hidden="true" focusable="false">
+          <use href="#icon-moon" />
+        </svg>
+        <svg class="theme-toggle__icon theme-toggle__icon--sun" width="20" height="20" aria-hidden="true" focusable="false">
+          <use href="#icon-sun" />
+        </svg>
+      </button>
       <h1>Daily CP tools</h1>
       <p class="site-header__download">
-        Downloads ~18 MB on first visit. Later visits use the browser cache.
+        Downloads ~18 MB on the first visit. Later visits use the browser cache.
       </p>
       <p class="lede">
         Runs in your browser with
@@ -46,7 +93,7 @@
       <section class="card" aria-labelledby="h-prime">
         <h2 id="h-prime">Is prime</h2>
         <p class="hint">
-          Is <span class="mono">N</span> prime? Previous and next prime. Feasible for <span class="mono">N ≤ 10<sup>300</sup></span>.
+          Checks if <span class="mono">N</span> is prime, finds previous and next primes. Feasible for <span class="mono">N ≤ 10<sup>300</sup></span>.
         </p>
         <div class="field">
           <textarea
@@ -293,8 +340,9 @@
       <section class="card" aria-labelledby="h-expr">
         <h2 id="h-expr">Arithmetic expression</h2>
         <p class="hint">
-          Numeric literals, <span class="mono">+ - * / // %</span>, powers with <span class="mono">**</span> or <span class="mono">^</span>.
-          No bitwise operators or function calls.
+          Numeric literals, <span class="mono">+ - * / // %</span>, powers with <span class="mono">**</span> or <span class="mono">^</span>,
+          and one-arg <span class="mono">sqrt</span>, <span class="mono">cbrt</span>, <span class="mono">log</span> (base&nbsp;10),
+          <span class="mono">log2</span>, <span class="mono">ln</span>. No bitwise operators or other calls.
         </p>
         <div class="field">
           <textarea
@@ -305,7 +353,7 @@
             autocomplete="off"
             spellcheck="false"
             wrap="soft"
-            placeholder="4 ^ 3"
+            placeholder="sqrt(16) + ln(1)"
             aria-label="Python arithmetic expression"
           ></textarea>
         </div>
@@ -466,6 +514,6 @@
       </p>
     </footer>
 
-    <script type="module" src="main.js?v=8"></script>
+    <script type="module" src="main.js?v=9"></script>
   </body>
 </html>

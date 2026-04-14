@@ -5,6 +5,7 @@ Uses SymPy for primes, factorization, and pi(x).
 from __future__ import annotations
 
 import ast
+import cmath
 import math
 import operator as opmod
 import sympy as sp
@@ -43,6 +44,24 @@ _UNARY_IMPL: dict[type[ast.unaryop], type] = {
     ast.USub: opmod.neg,
 }
 
+def _expr_sqrt(x):
+    if isinstance(x, complex):
+        return cmath.sqrt(x)
+    if isinstance(x, (int, float)) and not isinstance(x, bool) and x < 0:
+        return cmath.sqrt(complex(x))
+    return math.sqrt(x)
+
+
+# Whitelisted one-argument math calls for the expression evaluator.
+# ``log`` is base 10; ``ln`` is natural; ``log2`` is base 2.
+_EXPR_FUNC_IMPL = {
+    "sqrt": _expr_sqrt,
+    "cbrt": math.cbrt,
+    "log": math.log10,
+    "log2": math.log2,
+    "ln": math.log,
+}
+
 
 def _caret_to_pow(src: str) -> str:
     """Treat ``^`` as exponentiation (``**``) for parsing; Python's ``^`` is not used."""
@@ -74,6 +93,19 @@ def _ensure_safe_expr(node: ast.AST) -> None:
         _ensure_safe_expr(node.left)
         _ensure_safe_expr(node.right)
         return
+    if isinstance(node, ast.Call):
+        if not isinstance(node.func, ast.Name):
+            raise ValueError("Only simple function names are allowed (e.g. sqrt(x)), not attributes or lambdas.")
+        name = node.func.id
+        if name not in _EXPR_FUNC_IMPL:
+            allowed = ", ".join(sorted(_EXPR_FUNC_IMPL))
+            raise ValueError(f"Unknown function {name!r}. Allowed: {allowed}.")
+        if len(node.args) != 1:
+            raise ValueError(f"{name}() expects exactly one argument.")
+        if node.keywords:
+            raise ValueError("Keyword arguments are not allowed in expressions.")
+        _ensure_safe_expr(node.args[0])
+        return
     raise ValueError(f"Unsupported syntax ({type(node).__name__}); use Python arithmetic only.")
 
 
@@ -88,13 +120,17 @@ def _eval_safe_expr(node: ast.AST):  # int | float | complex
     if isinstance(node, ast.BinOp):
         fn = _BINOP_IMPL[type(node.op)]
         return fn(_eval_safe_expr(node.left), _eval_safe_expr(node.right))
+    if isinstance(node, ast.Call):
+        fn_node = node.func
+        assert isinstance(fn_node, ast.Name)
+        return _EXPR_FUNC_IMPL[fn_node.id](_eval_safe_expr(node.args[0]))
     raise ValueError("Internal evaluator error.")
 
 
 def _parsed_safe_eval_nonbool(s: str):
     """
     Parse and evaluate ``s`` (already stripped, non-empty) with the same rules as
-    ``evaluate_expression``: length, AST whitelist, and operators only.
+    ``evaluate_expression``: length, AST whitelist, operators, and whitelisted calls only.
     ``^`` is rewritten to ``**`` (power). Bitwise operators are not allowed.
     Returns int, float, or complex (never bool).
     """
@@ -138,8 +174,9 @@ def _scientific_repr(value) -> str:
 
 def evaluate_expression(raw: str, approximate: bool = False) -> str:
     """
-    Evaluate an arithmetic expression: numeric literals and ``+ - * / // % **``, parentheses.
-    ``^`` is treated as exponentiation (same as ``**``). Bitwise operators are not supported.
+    Evaluate an arithmetic expression: numeric literals, ``+ - * / // % **``, parentheses,
+    and ``sqrt``, ``cbrt``, ``log`` (base 10), ``log2``, ``ln`` (natural log), each with one argument.
+    ``^`` is treated as exponentiation (same as ``**``). Bitwise operators and other calls are not allowed.
     """
     src = (raw or "").strip()
     if not src:
